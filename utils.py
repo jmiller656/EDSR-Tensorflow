@@ -34,7 +34,7 @@ def upsample(x,scale=2,features=64,activation=tf.nn.relu):
 		x = slim.conv2d_transpose(x,features,9,stride=3,activation_fn=activation)
 	elif scale == 4:
 		for i in range(2):
-			x = slim.con2d_transpose(x,features,6,stride=2,activation_fn=activation)
+			x = slim.conv2d_transpose(x,features,6,stride=2,activation_fn=activation)
 	return x
 
 
