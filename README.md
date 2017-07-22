@@ -29,10 +29,14 @@ dataset as a training set and 20% as a testing set. I trained the EDSR over 1000
 ## Results
 | Original image | Shrunk image | EDSR Output |
 | -------------- | ------------ | ----------- |
-| TODO           | TODO         | TODO        |
+| ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/correct0.png "Original")          | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/input0.png "input")         | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/output0.png "shrunk")        |
+| ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/correct1.png "Original")          | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/input1.png "input")         | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/output1.png "shrunk")        |
+| ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/correct2.png "Original")          | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/input2.png "input")         | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/output2.png "shrunk")        |
+| ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/correct3.png "Original")          | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/input3.png "input")         | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/output3.png "shrunk")        |
+| ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/correct4.png "Original")          | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/input4.png "input")         | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/output4.png "shrunk")        |
 
 ## Remarks
-TODO
+It seems my output images have some deconvoltion artifacts (especially around the border). I plan on finding the reason for this. It likely could be a mistake I've made.
 
 ## Future work
 - Add MDSR implementation
