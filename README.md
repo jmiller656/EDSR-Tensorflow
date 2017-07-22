@@ -12,7 +12,6 @@ An implementation of [Enhanced Deep Residual Networks for Single Image Super-Res
 ## Training
 In order to train, you'll have to do a few things...
  - Download a dataset of images (due to my computational limitations, I've used General-100)
- - (If you'd like to use General-100, run ./download_data.sh)
  - Place all the images from that dataset into a directory under this one
  - run `python train.py --dataset data_dir` where data_dir is the directory containing your images
 
