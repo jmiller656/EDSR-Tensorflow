@@ -5,6 +5,7 @@ An implementation of [Enhanced Deep Residual Networks for Single Image Super-Res
  - Tensorflow
  - scipy
  - tqdm
+ - argparse
 
 ## Installation
  `pip install -r requirements.txt`
