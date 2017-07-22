@@ -1,6 +1,14 @@
 import data
+import argparse
 from model import EDSR
-data.load_dataset("data/General-100")
+parser = argparse.ArgumentParser()
+parser.add_argument("--dataset")
+args = parser.parse_args()
+if args.dataset:
+	dataset = args.dataset
+else:
+	dataset = "data/General-100"
+data.load_dataset(dataset)
 img_size = 64
 down_size = 32
 layers = 10
