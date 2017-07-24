@@ -24,7 +24,10 @@ class EDSR(object):
 		self.target = y = tf.placeholder(tf.float32,[None,img_size*scale,img_size*scale,output_channels])
 	
 		#One convolution before res blocks and to convert to required feature depth
-		x = slim.conv2d(x,feature_size,[3,3])	
+		x = slim.conv2d(x,feature_size,[3,3])
+	
+		#Store the output of the first convolution to add later
+		conv_1 = x	
 
 		"""
 		This creates `num_layers` number of resBlocks
@@ -42,18 +45,37 @@ class EDSR(object):
 		|
 		result
 		"""
-		for i in range(num_layers):
-			x = utils.resBlock(x,feature_size)
 
-		#Two more convolutions on the output of the res blocks
+		"""
+		Doing scaling here as mentioned in the paper:
+
+		`we found that increasing the number of feature
+		maps above a certain level would make the training procedure
+		numerically unstable. A similar phenomenon was
+		reported by Szegedy et al. We resolve this issue by
+		adopting the residual scaling with factor 0.1. In each
+		residual block, constant scaling layers are placed after the
+		last convolution layers. These modules stabilize the training
+		procedure greatly when using a large number of filters.
+		In the test phase, this layer can be integrated into the previous
+		convolution layer for the computational efficiency.'
+
+		"""
+		scaling_factor = 1 if feature_size <=64 else 0.1
+		
+		#Add the residual blocks to the model
+		for i in range(num_layers):
+			x = utils.resBlock(x,feature_size,scale=scaling_factor)
+
+		#One more convolution, and then we add the output of our first conv layer
 		x = slim.conv2d(x,feature_size,[3,3])
-		x = slim.conv2d(x,output_channels,[3,3])
+		x += conv_1
 		
 		#Upsample output of the convolution		
 		x = utils.upsample(x,scale,feature_size,None)
 
 		#One final convolution on the upsampling output
-		self.out = output = slim.conv2d(x,output_channels,[3,3])
+		self.out = output =x# slim.conv2d(x,output_channels,[3,3])
 
 		self.loss = loss = tf.reduce_mean(tf.losses.absolute_difference(y,output))
 		
