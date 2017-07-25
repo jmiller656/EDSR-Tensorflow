@@ -23,8 +23,18 @@ class EDSR(object):
 		#Placeholder for upscaled image ground-truth
 		self.target = y = tf.placeholder(tf.float32,[None,img_size*scale,img_size*scale,output_channels])
 	
+		"""
+		Preprocessing as mentioned in the paper, by subtracting the mean
+		However, the subtract the mean of the entire dataset they use. As of
+		now, I am subtracting the mean of each batch
+		"""
+		mean_x = tf.reduce_mean(self.input)
+		image_input =x- mean_x
+		mean_y = tf.reduce_mean(self.target)
+		image_target =y- mean_y
+
 		#One convolution before res blocks and to convert to required feature depth
-		x = slim.conv2d(x,feature_size,[3,3])
+		x = slim.conv2d(image_input,feature_size,[3,3])
 	
 		#Store the output of the first convolution to add later
 		conv_1 = x	
@@ -77,7 +87,14 @@ class EDSR(object):
 		#One final convolution on the upsampling output
 		self.out = output =x# slim.conv2d(x,output_channels,[3,3])
 
-		self.loss = loss = tf.reduce_mean(tf.losses.absolute_difference(y,output))
+		self.loss = loss = tf.reduce_mean(tf.losses.absolute_difference(image_target,output))
+
+		#Scalar to keep track for loss
+		tf.summary.scalar("loss",self.loss)
+		#Image summaries for input, target, and output
+		tf.summary.image("input_image",self.input+mean_x)
+		tf.summary.image("target_image",self.target+mean_y)
+		tf.summary.image("output_image",self.out+mean_x)
 		
 		#Tensorflow graph setup... session, saver, etc.
 		self.sess = tf.Session()
@@ -129,12 +146,6 @@ class EDSR(object):
 			shutil.rmtree(save_dir)
 		#Make new save directory
 		os.mkdir(save_dir)
-		#Scalar to keep track for loss
-		tf.summary.scalar("loss",self.loss)
-		#Image summaries for input, target, and output
-		tf.summary.image("input_image",self.input)
-		tf.summary.image("target_image",self.target)
-		tf.summary.image("output_image",self.out)
 		#Just a tf thing, to merge all summaries into one
 		merged = tf.summary.merge_all()
 		#Using adam optimizer as mentioned in the paper
