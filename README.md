@@ -12,11 +12,13 @@ An implementation of [Enhanced Deep Residual Networks for Single Image Super-Res
 
 ## Training
 In order to train, you'll have to do a few things...
- - Download a dataset of images (due to my computational limitations, I've used General-100)
+ - Download a dataset of images (due to my computational limitations, I've used [General-100](https://drive.google.com/file/d/0B7tU5Pj1dfCMVVdJelZqV0prWnM/view?usp=drive_web))
  - Place all the images from that dataset into a directory under this one
  - run `python train.py --dataset data_dir` where data_dir is the directory containing your images
+ - In order to view stats during training (image previews, scalar for loss), simply run `tensorboard --logdir your_save_directory` where `your_save_directory`
+ is the directory you passed in as the save directory argument for training (`saved_models` by default)
 
-## Training details
+## Training Details
 As I've mentioned before, I'm currently faced with some computational limitations, so this
 caused me to do a few things differently than what is mentioned in the paper. One of the
 more important changes I've made was using the General-100 dataset, because it's much smaller.
@@ -25,6 +27,9 @@ in the paper. This, however, can still be done using my code by adjusting some t
 I've trained by taking the center 100x100 pixels of each image in General-100, and shrinking them down to 50x50.
 I then trained an EDSR to resize the 50x50 pixel images back to 100x100. Currently, I use 80% of the
 dataset as a training set and 20% as a testing set. I trained the EDSR over 1000 iterations using Adam optimizer
+
+## Using Trained Network
+In order to use trained weights you just have to run this command `python test.py`
 
 ## Results
 | Original image | Shrunk image | EDSR Output |
@@ -38,6 +43,6 @@ dataset as a training set and 20% as a testing set. I trained the EDSR over 1000
 ## Remarks
 It seems my output images have some deconvoltion artifacts (especially around the border). I plan on finding the reason for this. It likely could be a mistake I've made.
 
-## Future work
+## Future Work
 - Add MDSR implementation
 - Train and post results on a larger model and dataset
