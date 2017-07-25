@@ -29,9 +29,14 @@ I then trained an EDSR to resize the 50x50 pixel images back to 100x100. Current
 dataset as a training set and 20% as a testing set. I trained the EDSR over 1000 iterations using Adam optimizer
 
 ## Using Trained Network
-In order to use trained weights you just have to run this command `python test.py`
+In order to use trained weights you just have to run this command `python test.py`. By default, this will take a random sample of
+five images from your dataset, compute their output, and save it in the `out` directory. If you'd like to just run superresolution on
+one image, you can run `python test.py --image your_picture` where `your_picture` is the image file you'd like to run superresolution on.
 
 ## Results
+These results were computed on a network using 3 layers, and a feature size of 16. The
+network was trained to scale 50x50px images to 100x100px for 1000 iterations. <br />
+
 | Original image | Shrunk image | EDSR Output |
 | -------------- | ------------ | ----------- |
 | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/correct0.png "Original")          | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/input0.png "input")         | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/output0.png "shrunk")        |
