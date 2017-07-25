@@ -40,9 +40,6 @@ In order to use trained weights you just have to run this command `python test.p
 | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/correct3.png "Original")          | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/input3.png "input")         | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/output3.png "shrunk")        |
 | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/correct4.png "Original")          | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/input4.png "input")         | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/output4.png "shrunk")        |
 
-## Remarks
-It seems my output images have some deconvoltion artifacts (especially around the border). I plan on finding the reason for this. It likely could be a mistake I've made.
-
 ## Future Work
 - Add MDSR implementation
 - Train and post results on a larger model and dataset
