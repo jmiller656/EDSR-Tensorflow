@@ -71,7 +71,7 @@ class EDSR(object):
 		convolution layer for the computational efficiency.'
 
 		"""
-		scaling_factor = 1 if feature_size <=64 else 0.1
+		scaling_factor = 0.1
 		
 		#Add the residual blocks to the model
 		for i in range(num_layers):
@@ -140,7 +140,7 @@ class EDSR(object):
 	"""
 	Train the neural network
 	"""
-	def train(self,iterations=1000,save_dir='saved_models'):
+	def train(self,iterations=1000,save_dir="saved_models"):
 		#Removing previous save directory if there is one
 		if os.path.exists(save_dir):
 			shutil.rmtree(save_dir)

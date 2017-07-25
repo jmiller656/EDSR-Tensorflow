@@ -32,16 +32,19 @@ def upsample(x,scale=2,features=64,activation=tf.nn.relu):
 	x = slim.conv2d(x,features,[3,3],activation_fn=activation)
 	if scale == 2:
 		ps_features = 3*(scale**2)
-		x = slim.conv2d_transpose(x,ps_features,6,stride=1,activation_fn=activation)
+		x = slim.conv2d(x,ps_features,[3,3],activation_fn=activation)
+		#x = slim.conv2d_transpose(x,ps_features,6,stride=1,activation_fn=activation)
 		x = PS(x,2,color=True)
 	elif scale == 3:
 		ps_features =3*(scale**2)
-		x = slim.conv2d_transpose(x,ps_features,9,stride=1,activation_fn=activation)
+		x = slim.conv2d(x,ps_features,[3,3],activation_fn=activation)
+		#x = slim.conv2d_transpose(x,ps_features,9,stride=1,activation_fn=activation)
 		x = PS(x,3,color=True)
 	elif scale == 4:
-		ps_features = 3*(scale**2)
+		ps_features = 3*(2**2)
 		for i in range(2):
-			x = slim.conv2d_transpose(x,ps_features,6,stride=1,activation_fn=activation)
+			x = slim.conv2d(x,ps_features,[3,3],activation_fn=activation)
+			#x = slim.conv2d_transpose(x,ps_features,6,stride=1,activation_fn=activation)
 			x = PS(x,2,color=True)
 	return x
 

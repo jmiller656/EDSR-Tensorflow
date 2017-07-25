@@ -2,24 +2,17 @@ import data
 import argparse
 from model import EDSR
 parser = argparse.ArgumentParser()
-parser.add_argument("--dataset")
-parser.add_argument("--imgsize")
-parser.add_argument("--scale")
-parser.add_argument("--layers")
-parser.add_argument("--featuresize")
-parser.add_argument("--batchsize")
+parser.add_argument("--dataset",default="data/General-100")
+parser.add_argument("--imgsize",default=100,type=int)
+parser.add_argument("--scale",default=2,type=int)
+parser.add_argument("--layers",default=32,type=int)
+parser.add_argument("--featuresize",default=256,type=int)
+parser.add_argument("--batchsize",default=10,type=int)
+parser.add_argument("--savedir",default='saved_models')
+parser.add_argument("--iterations",default=1000,type=int)
 args = parser.parse_args()
-if args.dataset:
-	dataset = args.dataset
-else:
-	dataset = "data/General-100"
-data.load_dataset(dataset)
-img_size = int(args.imgsize) if args.imgsize else 100
-scale = int(args.scale) if args.scale else 2
-down_size = img_size/scale
-layers = int(args.layers) if args.layers else 32
-feature_size = int(args.featuresize) if args.featuresize else 256
-batch_size = int(args.batchsize) if args.batchsize else 10
-network = EDSR(down_size,layers,feature_size,scale)
-network.set_data_fn(data.get_batch,(batch_size,img_size,down_size),data.get_test_set,(img_size,down_size))
-network.train()
+data.load_dataset(args.dataset)
+down_size = args.imgsize/args.scale
+network = EDSR(down_size,args.layers,args.featuresize,args.scale)
+network.set_data_fn(data.get_batch,(args.batchsize,args.imgsize,down_size),data.get_test_set,(args.imgsize,down_size))
+network.train(args.iterations,args.savedir)
