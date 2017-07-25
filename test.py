@@ -23,7 +23,8 @@ down_size = args.imgsize/args.scale
 network = EDSR(down_size,args.layers,args.featuresize,scale=args.scale)
 network.resume(args.savedir)
 if args.image:
-	y = data.crop_center(scipy.misc.imread(args.image),args.imgsize,args.imgsize)
+	y = scipy.misc.imread(args.image)
+	y = scipy.misc.imresize(y,(args.imgsize,args.imgsize))
 	x = [scipy.misc.imresize(y,(down_size,down_size))]
 	y = [y]
 else:
@@ -32,9 +33,9 @@ inputs = x
 outputs = network.predict(x)
 correct = y
 if args.image:
-	scipy.misc.imsave(args.outdir+"/input"+args.image,inputs[0])
-	scipy.misc.imsave(args.outdir+"/output"+args.image,outputs[0])
-	scipy.misc.imsave(args.outdir+"/correct"+args.image,correct[0])
+	scipy.misc.imsave(args.outdir+"/input_"+args.image,inputs[0])
+	scipy.misc.imsave(args.outdir+"/output_"+args.image,outputs[0])
+	scipy.misc.imsave(args.outdir+"/correct_"+args.image,correct[0])
 else:
 	for i in range(len(inputs)):
 		scipy.misc.imsave(args.outdir+"/input"+str(i)+".png",inputs[i])
