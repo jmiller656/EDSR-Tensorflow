@@ -88,9 +88,16 @@ class EDSR(object):
 		self.out = output =x# slim.conv2d(x,output_channels,[3,3])
 
 		self.loss = loss = tf.reduce_mean(tf.losses.absolute_difference(image_target,output))
-
+	
+		#Calculating Peak Signal-to-noise-ratio
+		#Using equations from here: https://en.wikipedia.org/wiki/Peak_signal-to-noise_ratio
+		mse = tf.reduce_mean(tf.squared_difference(image_target,output))	
+		PSNR = tf.constant(255**2,dtype=tf.float32)/mse
+		PSNR = tf.constant(10,dtype=tf.float32)*utils.log10(PSNR)
+	
 		#Scalar to keep track for loss
 		tf.summary.scalar("loss",self.loss)
+		tf.summary.scalar("PSNR",PSNR)
 		#Image summaries for input, target, and output
 		tf.summary.image("input_image",self.input+mean_x)
 		tf.summary.image("target_image",self.target+mean_y)

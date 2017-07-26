@@ -75,3 +75,11 @@ def PS(X, r, color=False):
 		X = _phase_shift(X, r)
 	return X
 
+"""
+Tensorflow log base 10.
+Found here: https://github.com/tensorflow/tensorflow/issues/1666
+"""
+def log10(x):
+  numerator = tf.log(x)
+  denominator = tf.log(tf.constant(10, dtype=numerator.dtype))
+  return numerator / denominator
