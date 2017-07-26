@@ -104,9 +104,9 @@ class EDSR(object):
 	"""
 	Save the current state of the network to file
 	"""
-	def save(self,savedir='saved_models/model'):
+	def save(self,savedir='saved_models'):
 		print("Saving...")
-		self.saver.save(self.sess,savedir)
+		self.saver.save(self.sess,savedir+"/model")
 		print("Saved!")
 		
 	"""
@@ -159,7 +159,6 @@ class EDSR(object):
 			#Initialize all variables
 			sess.run(init)
 			test_exists = self.test_data
-	
 			#create summary writer for train
 			train_writer = tf.summary.FileWriter(save_dir+"/train",sess.graph)
 
