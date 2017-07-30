@@ -12,7 +12,7 @@ parser.add_argument("--savedir",default='saved_models')
 parser.add_argument("--iterations",default=1000,type=int)
 args = parser.parse_args()
 data.load_dataset(args.dataset)
-down_size = args.imgsize/args.scale
+down_size = args.imgsize//args.scale
 network = EDSR(down_size,args.layers,args.featuresize,args.scale)
 network.set_data_fn(data.get_batch,(args.batchsize,args.imgsize,down_size),data.get_test_set,(args.imgsize,down_size))
 network.train(args.iterations,args.savedir)

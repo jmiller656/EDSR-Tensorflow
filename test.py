@@ -19,7 +19,7 @@ args = parser.parse_args()
 if not os.path.exists(args.outdir):
 	os.mkdir(args.outdir)
 data.load_dataset(args.dataset)
-down_size = args.imgsize/args.scale
+down_size = args.imgsize//args.scale
 network = EDSR(down_size,args.layers,args.featuresize,scale=args.scale)
 network.resume(args.savedir)
 if args.image:
