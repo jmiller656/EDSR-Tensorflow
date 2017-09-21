@@ -85,7 +85,8 @@ class EDSR(object):
 		x = utils.upsample(x,scale,feature_size,None)
 
 		#One final convolution on the upsampling output
-		self.out = output =x# slim.conv2d(x,output_channels,[3,3])
+		output =x# slim.conv2d(x,output_channels,[3,3])
+		self.out = tf.clip_by_value(output+mean_x,0.0,255.0)
 
 		self.loss = loss = tf.reduce_mean(tf.losses.absolute_difference(image_target,output))
 	
@@ -99,9 +100,9 @@ class EDSR(object):
 		tf.summary.scalar("loss",self.loss)
 		tf.summary.scalar("PSNR",PSNR)
 		#Image summaries for input, target, and output
-		tf.summary.image("input_image",self.input+mean_x)
-		tf.summary.image("target_image",self.target+mean_y)
-		tf.summary.image("output_image",self.out+mean_x)
+		tf.summary.image("input_image",tf.cast(self.input,tf.uint8))
+		tf.summary.image("target_image",tf.cast(self.target,tf.uint8))
+		tf.summary.image("output_image",tf.cast(self.out,tf.uint8))
 		
 		#Tensorflow graph setup... session, saver, etc.
 		self.sess = tf.Session()
