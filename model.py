@@ -1,8 +1,10 @@
-import tensorflow as tf
 import tensorflow.contrib.slim as slim
-import utils
-import shutil
+import scipy.misc
+import tensorflow as tf
 from tqdm import tqdm
+import numpy as np
+import shutil
+import utils
 import os
 
 """
@@ -18,6 +20,10 @@ class EDSR(object):
 
 	def __init__(self,img_size=32,num_layers=32,feature_size=256,scale=2,output_channels=3):
 		print("Building EDSR...")
+		self.img_size = img_size
+		self.scale = scale
+		self.output_channels = output_channels
+
 		#Placeholder for image inputs
 		self.input = x = tf.placeholder(tf.float32,[None,img_size,img_size,output_channels])
 		#Placeholder for upscaled image ground-truth
@@ -128,13 +134,37 @@ class EDSR(object):
 	"""
 	Compute the output of this network given a specific input
 
-	x: a tensor of shape [n,image_w,image_h,image_channels] where n is the number of images you have
+	x: either one of these things:
+		1. A numpy array of shape [image_width,image_height,3]
+		2. A numpy array of shape [n,input_size,input_size,3]
 
-	returns: a tensor of shape [n,image_width*2,img_height*2,channels] containing your super-resolution image(s)
+	return: 	For the first case, we go over the entire image and run super-resolution over windows of the image
+			that are of size [input_size,input_size,3]. We then stitch the output of these back together into the
+			new super-resolution image and return that
+
+	return  	For the second case, we return a numpy array of shape [n,input_size*scale,input_size*scale,3]
 	"""
 	def predict(self,x):
 		print("Predicting...")
-		return self.sess.run(self.out,feed_dict={self.input:x})
+		if (len(x.shape) == 3) and not(x.shape[0] == self.img_size and x.shape[1] == self.img_size):
+			num_across = x.shape[0]//self.img_size
+			num_down = x.shape[1]//self.img_size
+			tmp_image = np.zeros([x.shape[0]*self.scale,x.shape[1]*self.scale,3])
+			for i in range(num_across):
+				for j in range(num_down):
+					tmp = self.sess.run(self.out,feed_dict={self.input:[x[i*self.img_size:(i+1)*self.img_size,j*self.img_size:(j+1)*self.img_size]]})[0]
+					tmp_image[i*tmp.shape[0]:(i+1)*tmp.shape[0],j*tmp.shape[1]:(j+1)*tmp.shape[1]] = tmp
+			if x.shape[0]%self.img_size != 0:
+				for j in range(num_down):
+					tmp = self.sess.run(self.out,feed_dict={self.input:[x[-1*self.img_size:,j*self.img_size:(j+1)*self.img_size]]})[0]
+					tmp_image[-1*tmp.shape[0]:,j*tmp.shape[1]:(j+1)*tmp.shape[1]] = tmp
+			if x.shape[1]%self.img_size != 0:
+				for j in range(num_across):
+                                        tmp = self.sess.run(self.out,feed_dict={self.input:[x[j*self.img_size:(j+1)*self.img_size,-1*self.img_size:]]})[0]
+                                        tmp_image[j*tmp.shape[0]:(j+1)*tmp.shape[0],-1*tmp.shape[1]:] = tmp
+			return tmp_image
+		else:
+			return self.sess.run(self.out,feed_dict={self.input:x})
 
 	"""
 	Function to setup your input data pipeline
