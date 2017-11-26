@@ -154,6 +154,12 @@ class EDSR(object):
 				for j in range(num_down):
 					tmp = self.sess.run(self.out,feed_dict={self.input:[x[i*self.img_size:(i+1)*self.img_size,j*self.img_size:(j+1)*self.img_size]]})[0]
 					tmp_image[i*tmp.shape[0]:(i+1)*tmp.shape[0],j*tmp.shape[1]:(j+1)*tmp.shape[1]] = tmp
+			#this added section fixes bottom right corner when testing
+			if (x.shape[0]%self.img_size != 0 and  x.shape[1]%self.img_size != 0):
+				tmp = self.sess.run(self.out,feed_dict={self.input:[x[-1*self.img_size:,-1*self.img_size:]]})[0]
+				tmp_image[-1*tmp.shape[0]:,-1*tmp.shape[1]:] = tmp
+			scipy.misc.imsave('test1.png', tmp_image)
+					
 			if x.shape[0]%self.img_size != 0:
 				for j in range(num_down):
 					tmp = self.sess.run(self.out,feed_dict={self.input:[x[-1*self.img_size:,j*self.img_size:(j+1)*self.img_size]]})[0]
