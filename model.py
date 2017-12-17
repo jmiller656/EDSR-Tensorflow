@@ -158,7 +158,6 @@ class EDSR(object):
 			if (x.shape[0]%self.img_size != 0 and  x.shape[1]%self.img_size != 0):
 				tmp = self.sess.run(self.out,feed_dict={self.input:[x[-1*self.img_size:,-1*self.img_size:]]})[0]
 				tmp_image[-1*tmp.shape[0]:,-1*tmp.shape[1]:] = tmp
-			scipy.misc.imsave('test1.png', tmp_image)
 					
 			if x.shape[0]%self.img_size != 0:
 				for j in range(num_down):
