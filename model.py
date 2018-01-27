@@ -34,10 +34,15 @@ class EDSR(object):
 		However, the subtract the mean of the entire dataset they use. As of
 		now, I am subtracting the mean of each batch
 		"""
+		
 		mean_x = tf.reduce_mean(self.input)
 		image_input =x- mean_x
 		mean_y = tf.reduce_mean(self.target)
 		image_target =y- mean_y
+
+		#Pad images
+		image_input = tf.pad(image_input,[[0,0],[2,2],[2,2],[0,0]],"CONSTANT")
+		image_target = tf.pad(image_target,[[0,0],[2*scale,2*scale],[2*scale,2*scale],[0,0]],"CONSTANT")
 
 		#One convolution before res blocks and to convert to required feature depth
 		x = slim.conv2d(image_input,feature_size,[3,3])
@@ -150,23 +155,23 @@ class EDSR(object):
 			num_across = x.shape[0]//self.img_size
 			num_down = x.shape[1]//self.img_size
 			tmp_image = np.zeros([x.shape[0]*self.scale,x.shape[1]*self.scale,3])
-			for i in range(num_across):
+			for i in tqdm(range(num_across)):
 				for j in range(num_down):
-					tmp = self.sess.run(self.out,feed_dict={self.input:[x[i*self.img_size:(i+1)*self.img_size,j*self.img_size:(j+1)*self.img_size]]})[0]
+					tmp = self.sess.run(self.out,feed_dict={self.input:[x[i*self.img_size:(i+1)*self.img_size,j*self.img_size:(j+1)*self.img_size]]})[0][2*self.scale:-2*self.scale,2*self.scale:-2*self.scale]
 					tmp_image[i*tmp.shape[0]:(i+1)*tmp.shape[0],j*tmp.shape[1]:(j+1)*tmp.shape[1]] = tmp
 			#this added section fixes bottom right corner when testing
 			if (x.shape[0]%self.img_size != 0 and  x.shape[1]%self.img_size != 0):
-				tmp = self.sess.run(self.out,feed_dict={self.input:[x[-1*self.img_size:,-1*self.img_size:]]})[0]
-				tmp_image[-1*tmp.shape[0]:,-1*tmp.shape[1]:] = tmp
+				tmp = self.sess.run(self.out,feed_dict={self.input:[x[-1*self.img_size:,-1*self.img_size:]]})[0][2*self.scale:-2*self.scale,2*self.scale:-2*self.scale]
+				tmp_image[-1*tmp.shape[0]:,-1*tmp.shape[1]:] = tmp[2*self.scale:-2*self.scale,2*self.scale:-2*self.scale]
 					
 			if x.shape[0]%self.img_size != 0:
 				for j in range(num_down):
 					tmp = self.sess.run(self.out,feed_dict={self.input:[x[-1*self.img_size:,j*self.img_size:(j+1)*self.img_size]]})[0]
-					tmp_image[-1*tmp.shape[0]:,j*tmp.shape[1]:(j+1)*tmp.shape[1]] = tmp
+					tmp_image[-1*tmp.shape[0]:,j*tmp.shape[1]:(j+1)*tmp.shape[1]] = tmp[2*self.scale:-2*self.scale,2*self.scale:-2*self.scale]
 			if x.shape[1]%self.img_size != 0:
 				for j in range(num_across):
                                         tmp = self.sess.run(self.out,feed_dict={self.input:[x[j*self.img_size:(j+1)*self.img_size,-1*self.img_size:]]})[0]
-                                        tmp_image[j*tmp.shape[0]:(j+1)*tmp.shape[0],-1*tmp.shape[1]:] = tmp
+                                        tmp_image[j*tmp.shape[0]:(j+1)*tmp.shape[0],-1*tmp.shape[1]:] = tmp[2*self.scale:-2*self.scale,2*self.scale:-2*self.scale]
 			return tmp_image
 		else:
 			return self.sess.run(self.out,feed_dict={self.input:x})
