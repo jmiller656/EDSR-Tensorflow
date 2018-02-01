@@ -23,23 +23,11 @@ down_size = args.imgsize//args.scale
 network = EDSR(down_size,args.layers,args.featuresize,scale=args.scale)
 network.resume(args.savedir)
 if args.image:
-	y = scipy.misc.imread(args.image)
-	y = scipy.misc.imresize(y,(args.imgsize,args.imgsize))
-	x = [scipy.misc.imresize(y,(down_size,down_size))]
-	y = [y]
+	x = scipy.misc.imread(args.image)
 else:
-	x,y=data.get_batch(args.numimgs,args.imgsize,down_size)
+	print("No image argument given")
 inputs = x
 outputs = network.predict(x)
-correct = y
 if args.image:
-	scipy.misc.imsave(args.outdir+"/input_"+args.image,inputs[0])
-	scipy.misc.imsave(args.outdir+"/output_"+args.image,outputs[0])
-	scipy.misc.imsave(args.outdir+"/correct_"+args.image,correct[0])
-else:
-	for i in range(len(inputs)):
-		scipy.misc.imsave(args.outdir+"/input"+str(i)+".png",inputs[i])
-	for i in range(len(outputs)):
-		scipy.misc.imsave(args.outdir+"/output"+str(i)+".png",outputs[i])
-	for i in range(len(correct)):
-		scipy.misc.imsave(args.outdir+"/correct"+str(i)+".png",correct[i])
+	scipy.misc.imsave(args.outdir+"/input_"+args.image,inputs)
+	scipy.misc.imsave(args.outdir+"/output_"+args.image,outputs)
