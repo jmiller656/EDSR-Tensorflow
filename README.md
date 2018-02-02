@@ -36,7 +36,9 @@ one image, you can run `python test.py --image your_picture` where `your_picture
 ## Results
 These results were computed on a network using 3 layers, and a feature size of 16. The
 network was trained to scale 50x50px images to 100x100px for 1000 iterations. <br />
-
+<br />
+Updates coming soon.......
+<br />
 | Original image | Shrunk image | EDSR Output |
 | -------------- | ------------ | ----------- |
 | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/correct0.png "Original")          | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/input0.png "input")         | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/output0.png "shrunk")        |
@@ -48,3 +50,6 @@ network was trained to scale 50x50px images to 100x100px for 1000 iterations. <b
 ## Future Work
 - Add MDSR implementation
 - Train and post results on a larger model and dataset
+
+## Pre-trained model
+There is a pre-trained model that I have made for the baseline model (default params) using my machine. If you'd like to use it, download the files [here](https://drive.google.com/drive/folders/1KaotYQZb842OGHPujsijNgwdEKQo6oF9?usp=sharing). In order to run, create a directory called `saved_models` and place the files in there. Then you can use test.py to sample images
