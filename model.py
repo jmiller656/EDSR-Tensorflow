@@ -34,9 +34,9 @@ class EDSR(object):
 		However, the subtract the mean of the entire dataset they use. As of
 		now, I am subtracting the mean of each batch
 		"""
-		mean_x = tf.reduce_mean(self.input)
+		mean_x = 127#tf.reduce_mean(self.input)
 		image_input =x- mean_x
-		mean_y = tf.reduce_mean(self.target)
+		mean_y = 127#tf.reduce_mean(self.target)
 		image_target =y- mean_y
 
 		#One convolution before res blocks and to convert to required feature depth
@@ -91,7 +91,7 @@ class EDSR(object):
 		x = utils.upsample(x,scale,feature_size,None)
 
 		#One final convolution on the upsampling output
-		output =x# slim.conv2d(x,output_channels,[3,3])
+		output = x#slim.conv2d(x,output_channels,[3,3])
 		self.out = tf.clip_by_value(output+mean_x,0.0,255.0)
 
 		self.loss = loss = tf.reduce_mean(tf.losses.absolute_difference(image_target,output))
