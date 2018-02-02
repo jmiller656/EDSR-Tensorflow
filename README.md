@@ -39,6 +39,8 @@ network was trained to scale 50x50px images to 100x100px for 1000 iterations. <b
 <br />
 Updates coming soon.......
 <br />
+
+
 | Original image | Shrunk image | EDSR Output |
 | -------------- | ------------ | ----------- |
 | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/correct0.png "Original")          | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/input0.png "input")         | ![alt-text](https://github.com/jmiller656/EDSR-Tensorflow/blob/master/results/output0.png "shrunk")        |
@@ -52,4 +54,4 @@ Updates coming soon.......
 - Train and post results on a larger model and dataset
 
 ## Pre-trained model
-There is a pre-trained model that I have made for the baseline model (default params) using my machine. If you'd like to use it, download the files [here](https://drive.google.com/drive/folders/1KaotYQZb842OGHPujsijNgwdEKQo6oF9?usp=sharing). In order to run, create a directory called `saved_models` and place the files in there. Then you can use test.py to sample images
+There is a pre-trained model that I have made for the baseline model (default params) using my machine. If you'd like to use it, download the files [here](https://drive.google.com/drive/folders/1KaotYQZb842OGHPujsijNgwdEKQo6oF9?usp=sharing). In order to run, create a directory called `saved_models` and place the files in there. Then you can use test.py to resize images.
